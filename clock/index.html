@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .clock-body{
+      background-image: url('./background.jpg');
+      background-size: cover;
+      min-height: 100vh;
+      position: relative;
+    }
+    .clock{
+      border: 5px solid #eee;
+      border-radius: 50%;
+      width: 500px;
+      height: 500px;
+      margin: 0 auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255,255,255,.25);
+    }
+    .clock > div {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+
+      transform-origin: 0;
+      transform: rotate(-90deg);
+
+    }
+    .pole-hour {
+      width: 120px;
+      height: 10px;
+      background: #eee;
+    }
+    .pole-minute{
+      width: 180px;
+      height: 10px;
+      background: #eee;
+    }
+    .pole-second{
+      width: 200px;
+      height: 5px;
+      background: rgb(255, 152, 67);
+    }
+
+  </style>
+</head>
+<body>
+  <div class="clock-body">
+    <div class="clock">
+      <div class="pole-hour"></div>
+      <div class="pole-minute"></div>
+      <div class="pole-second"></div>
+    </div>
+  </div>
+  <script>
+  window.addEventListener("load", function(){
+    start();
+  })
+  const start = ()=>{
+    const now = new Date();
+    const hour = document.querySelector(".pole-hour");
+    const minute = document.querySelector(".pole-minute");
+    const second = document.querySelector(".pole-second");
+    
+    const secondTime = now.getSeconds();
+    const secondDegrees = (secondTime * 6) - 90; //1초는 6도
+    second.style.transform = `rotate(${secondDegrees}deg)`;
+    
+    const minuteTime = now.getMinutes();
+    const minuteDegrees = (minuteTime * 6) - 90;   //1분은 6도
+    minute.style.transform = `rotate(${minuteDegrees}deg)`;
+
+
+    let hourTime = now.getHours();
+    // console.log(hourTime);
+    if(hourTime < 12){
+      return;
+    }else{
+      hourTime = hourTime - 12;
+      console.log(hourTime);
+    };
+
+    // 시간당 = 5회
+    // 5회 * 1분 * 6도 => 5 * 6 => 시간당 30도!
+    // 예: 4시 -> 120도
+    // 4시 30분 -> 120도 + 15도 => (30도 / 60분 * 30분 )
+    // 4시 45분 -> 120도 + 22.5도 => (30도 / 60분 * 45분) 
+
+    const hourDegrees = (hourTime * 30) + (30/60 * minuteTime) - 90;
+    hour.style.transform = `rotate(${hourDegrees}deg)`;
+  }
+  setInterval(start, 1000);
+  start();
+
+  </script>
+
+</body>
+</html>
